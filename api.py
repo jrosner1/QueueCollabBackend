@@ -2,7 +2,7 @@ import firebase_admin
 from flask import Flask
 from flask_restful import Api, Resource
 from firebase_admin import credentials, initialize_app, db
-import views, models, resources
+import resources.User
 
 # User management helpful link https://betterprogramming.pub/user-management-with-firebase-and-python-749a7a87b2b6
 # Helpful query guide for firebase https://firebase.google.com/docs/database/admin/retrieve-data#python_3
@@ -21,13 +21,8 @@ db = db.reference("/")
 
 
 
-api.add_resource(resources.UserRegistration, '/registration')
-api.add_resource(resources.UserLogin, '/login')
-api.add_resource(resources.UserLogoutAccess, '/logout/access')
-api.add_resource(resources.UserLogoutRefresh, '/logout/refresh')
-api.add_resource(resources.TokenRefresh, '/token/refresh')
-api.add_resource(resources.AllUsers, '/users')
-api.add_resource(resources.SecretResource, '/secret')
+api.add_resource(resources.User, '/User')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
