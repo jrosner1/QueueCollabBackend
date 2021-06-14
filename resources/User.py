@@ -1,44 +1,28 @@
-from flask_restful import fields, marshal_with, reqparse, Resource
+from flask import jsonify, request
+from flask_restful import Resource
+from common.firebase_util import create_user
+from marshmallow import Schema, fields, post_load
+from Models import UserModel
 
-post_parser = reqparse.RequestParser()
-post_parser.add_argument(
-    'email' , dest='email',
-    location='form', required=True,
-    help='The user\'s username'
-)
-post_parser.add_argument(
-    'display_name', dest='display_name',
-    location='form', required=True,
-    help='the user\'s display name'
-)
-post_parser.add_argument(
-    'password', dest='password',
-    
-)
-post_parser.add_argument(
-    'email_verified', dest='email_verified',
-    loation='form', required=True,
-    help='Describes whether or not the user\'s email has been verified.'
-)
+class UserSchema(Schema):
+    name = fields.Str()
+    email = fields.Email()
+    created_at = fields.DateTime(required=False)
+    password = fields.Str()
+    phone_number = fields.Str()
+    display_name = fields.Str(required=False)
+    email_verified = fields.Bool(required=False)
 
-user_fields = {
-    'email': fields.String,
-    'display_name': fields.String,
-    'password': fields.String,
-    'email_verified': fields.Boolean,
-    'phone_number': fields.String
-}
-
-
+    @post_load
+    def make_user(self, data, **kwargs):
+        return UserModel(**data)
 
 class User(Resource):
-    @marshal_with(user_fields)
     def post(self):
-        
-    def get(self):
-        #Method to be added
-        pass
-    def post(self):
-        #Method to be added
-        pass
+        schema = UserSchema(many=True)
+        print(request.json)
+        result = schema.load(request.json)
+        result.save_to_db()
+
+
 

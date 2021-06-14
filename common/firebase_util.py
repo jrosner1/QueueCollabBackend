@@ -5,6 +5,8 @@ def get_user_object_from_email(email):
     return user.toJSON()
 
 def create_user(email_input, display_name_input, password_input, phone_number_input):
+    print(email_input)
+    print(display_name_input)
     try:
         user = auth.create_user(
             email = email_input,
@@ -16,7 +18,7 @@ def create_user(email_input, display_name_input, password_input, phone_number_in
         )
         return user
     
-    except exceptions.FireBaseError as ex:
+    except Exception as ex:
         print(f'failed to create new user: {ex}')
 
 
